@@ -1,0 +1,355 @@
+<!DOCTYPE HTML><html>
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src="js/highcharts.js"></script>
+  <script src="js/highcharts-more.js"></script>
+  <style>
+    body {
+      min-width: 310px;
+    	max-width: 800px;
+    	height: 400px;
+      margin: 0 auto;
+    }
+    h2 {
+      font-family: Arial;
+      font-size: 2.5rem;
+      text-align: center;
+    }
+    
+  </style>
+</head>
+<body>
+  <h2>ESP Alpha Centauri</h2>
+  <div id="chart-temperature" class="container"></div>
+  <div id="chart-altura" class="container"></div>
+  <div id="chart-pressure" class="container"></div>
+  <div id="chart-uvv" class="container"></div>
+  <div id="chart-uvr" class="container"></div>
+  <div id="gauge-container" class="container"></div>
+</body>
+<script>
+var chartT = new Highcharts.Chart({
+  chart:{ renderTo : 'chart-temperature' },
+  title: { text: 'Temperatura' },
+  series: [{
+    showInLegend: false,
+    data: []
+  }],
+  plotOptions: {
+    line: { animation: false,
+      dataLabels: { enabled: true }
+    },
+    series: { color: '#059e8a' }
+  },
+  time: {
+    timezoneOffset: 180
+  },
+  xAxis: { type: 'datetime',
+    dateTimeLabelFormats: { second: '%H:%M:%S' }
+  },
+  yAxis: {
+    title: { text: 'Temperatura (Celsius)' }
+  },
+  credits: { enabled: false }
+});
+setInterval(function ( ) {
+  var xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+      var x = (new Date()).getTime(),
+          y = parseFloat(this.responseText);
+      //console.log(this.responseText);
+      if(chartT.series[0].data.length > 40) {
+        chartT.series[0].addPoint([x, y], true, true, true);
+      } else {
+        chartT.series[0].addPoint([x, y], true, false, true);
+      }
+    }
+  };
+  xhttp.open("GET", "/temperature/", true);
+  xhttp.send();
+}, 1000 ) ;
+
+var chartA = new Highcharts.Chart({
+  chart:{ renderTo:'chart-altura' },
+  title: { text: 'Altura' },
+  series: [{
+    showInLegend: false,
+    data: []
+  }],
+  plotOptions: {
+    line: { animation: false,
+      dataLabels: { enabled: true }
+    }
+  },
+  time: {
+    timezoneOffset: 180
+  },
+  xAxis: {
+    type: 'datetime',
+    dateTimeLabelFormats: { second: '%H:%M:%S' }
+  },
+  yAxis: {
+    title: { text: 'Altura (Metros)' }
+  },
+  credits: { enabled: false }
+});
+setInterval(function ( ) {
+  var xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+      var x = (new Date()).getTime(),
+          y = parseFloat(this.responseText);
+      //console.log(this.responseText);
+      if(chartA.series[0].data.length > 40) {
+        chartA.series[0].addPoint([x, y], true, true, true);
+      } else {
+        chartA.series[0].addPoint([x, y], true, false, true);
+      }
+    }
+  };
+  xhttp.open("GET", "/altitud/", true);
+  xhttp.send();
+}, 1000 ) ;
+
+var chartP = new Highcharts.Chart({
+  chart:{ renderTo:'chart-pressure' },
+  title: { text: 'Presion Relativa' },
+  series: [{
+    showInLegend: false,
+    data: []
+  }],
+  plotOptions: {
+    line: { animation: false,
+      dataLabels: { enabled: true }
+    },
+    series: { color: '#18009c' }
+  },
+  time: {
+    timezoneOffset: 180
+  },
+  xAxis: {
+    type: 'datetime',
+    dateTimeLabelFormats: { second: '%H:%M:%S' }
+  },
+  yAxis: {
+    title: { text: 'Presion (hPa)' }
+  },
+  credits: { enabled: false }
+});
+setInterval(function ( ) {
+  var xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+      var x = (new Date()).getTime(),
+          y = parseFloat(this.responseText);
+      //console.log(this.responseText);
+      if(chartP.series[0].data.length > 40) {
+        chartP.series[0].addPoint([x, y], true, true, true);
+      } else {
+        chartP.series[0].addPoint([x, y], true, false, true);
+      }
+    }
+  };
+  xhttp.open("GET", "/presion/", true);
+  xhttp.send();
+}, 1000 ) ;
+
+var chartUVV = new Highcharts.Chart({
+  chart:{ renderTo:'chart-uvv' },
+  title: { text: 'Voltaje Sensor UV' },
+  series: [{
+    showInLegend: false,
+    data: []
+  }],
+  plotOptions: {
+    line: { animation: false,
+      dataLabels: { enabled: true }
+    },
+    series: { color: '#B600FF' }
+  },
+  time: {
+    timezoneOffset: 180
+  },
+  xAxis: {
+    type: 'datetime',
+    dateTimeLabelFormats: { second: '%H:%M:%S' }
+  },
+  yAxis: {
+    title: { text: 'Voltaje (Volt)' }
+  },
+  credits: { enabled: false }
+});
+setInterval(function ( ) {
+  var xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+      var x = (new Date()).getTime(),
+          y = parseFloat(this.responseText);
+      //console.log(this.responseText);
+      if(chartUVV.series[0].data.length > 40) {
+        chartUVV.series[0].addPoint([x, y], true, true, true);
+      } else {
+        chartUVV.series[0].addPoint([x, y], true, false, true);
+      }
+    }
+  };
+  xhttp.open("GET", "/uvvolt/", true);
+  xhttp.send();
+}, 1000 ) ;
+
+var chartUVR = new Highcharts.Chart({
+  chart:{ renderTo:'chart-uvr' },
+  title: { text: 'Radiancia UV' },
+  series: [{
+    showInLegend: false,
+    data: []
+  }],
+  plotOptions: {
+    line: { animation: false,
+      dataLabels: { enabled: true }
+    },
+    series: { color: '#FF0000' }
+  },
+  time: {
+    timezoneOffset: 180
+  },
+  xAxis: {
+    type: 'datetime',
+    dateTimeLabelFormats: { second: '%H:%M:%S' }
+  },
+  yAxis: {
+    title: { text: 'Radiancia (mW/cm^2)' }
+  },
+  credits: { enabled: false }
+});
+setInterval(function ( ) {
+  var xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+      var x = (new Date()).getTime(),
+          y = parseFloat(this.responseText);
+      //console.log(this.responseText);
+      if(chartUVR.series[0].data.length > 40) {
+        chartUVR.series[0].addPoint([x, y], true, true, true);
+      } else {
+        chartUVR.series[0].addPoint([x, y], true, false, true);
+      }
+    }
+  };
+  xhttp.open("GET", "/uvrad/", true);
+  xhttp.send();
+}, 1000 ) ;
+
+
+var gaugeChart = Highcharts.chart('gauge-container', {
+    chart: {
+      type: 'gauge',
+      plotBackgroundColor: null,
+      plotBackgroundImage: null,
+      plotBorderWidth: 0,
+      plotShadow: false,
+      height: '80%'
+    },
+    title: {
+      text: 'UV Index'
+    },
+    pane: {
+      startAngle: -90,
+      endAngle: 90,
+      background: null,
+      center: ['50%', '75%'],
+      size: '110%'
+    },
+    yAxis: {
+      min: 0,
+      max: 15,
+      tickPixelInterval: 72,
+      tickPosition: 'inside',
+      tickColor: Highcharts.defaultOptions.chart.backgroundColor || '#FFFFFF',
+      tickLength: 20,
+      tickWidth: 2,
+      minorTickInterval: null,
+      labels: {
+        distance: 20,
+        style: {
+          fontSize: '14px'
+        }
+      },
+      lineWidth: 0,
+      plotBands: [{
+        from: 0,
+        to: 2.5,
+        color: '#51b82d', // verde
+        thickness: 20
+      }, {
+        from: 2.5,
+        to: 5.5,
+        color: '#f8f100', // amarillo
+        thickness: 20
+      }, {
+        from: 5.5,
+        to: 7.5,
+        color: '#efa000', // naranja
+        thickness: 20
+      }, {
+        from: 7.5,
+        to: 10.5,
+        color: '#df0023', // rojo
+        thickness: 20
+      }, {
+        from: 10.5,
+        to: 15,
+        color: '#c678aa', // violeta
+        thickness: 20
+      }]
+    },
+    series: [{
+      name: 'UV Index',
+      data: [0], // Valor inicial del índice UV
+      tooltip: {
+        valueSuffix: ' UV'
+      },
+      dataLabels: {
+        format: '{y}',
+        borderWidth: 0,
+        color: (
+          Highcharts.defaultOptions.title &&
+          Highcharts.defaultOptions.title.style &&
+          Highcharts.defaultOptions.title.style.color
+        ) || '#333333',
+        style: {
+          fontSize: '16px'
+        }
+      },
+      dial: {
+        radius: '80%',
+        backgroundColor: 'gray',
+        baseWidth: 12,
+        baseLength: '0%',
+        rearLength: '0%'
+      },
+      pivot: {
+        backgroundColor: 'gray',
+        radius: 6
+      }
+    }]
+  });
+
+  // Código para actualizar el valor del gráfico de indicador (gauge)
+  setInterval(() => {
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+      if (this.readyState == 4 && this.status == 200) {
+        var uvIndex = parseFloat(this.responseText);
+        var point = gaugeChart.series[0].points[0];
+        point.update(uvIndex);
+      }
+    };
+    xhttp.open("GET", "/uvindex/", true);
+    xhttp.send();
+  }, 1000);
+
+
+</script>
+</html>
